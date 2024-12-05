@@ -87,6 +87,8 @@ public final class AdministracionCine {
         PeliculasUniversidad.add(Deadpool_Wolverine_Universidad);
         PeliculasUniversidad.add(Godzilla_vs_Kong_2_Universidad);
         
+        
+        
         Peliculas Hércules_Delta = new Peliculas("Hércules",2,90);
         Hércules_Delta.setHorarioInicio("16:00");
         
@@ -148,95 +150,6 @@ public final class AdministracionCine {
         System.out.println("========================================\n");
     }
  
-    public static void comprarBoleto(Sucursal sucursal, Scanner scanner) {
-        // Mostrar las películas disponibles
-        System.out.println("\n========================================");
-        System.out.println("         Comprar Boleto en " + sucursal.getNombre());
-        System.out.println("========================================");
-
-        // Listar las películas con índices
-        List<Peliculas> peliculas = sucursal.getPeliculas();
-        if (peliculas.isEmpty()) {
-            System.out.println("No hay películas disponibles en esta sucursal.");
-            return;
-        }
-
-        for (int i = 0; i < peliculas.size(); i++) {
-            Peliculas pelicula = peliculas.get(i);
-            System.out.printf("%d. %s (Horario: %s, Sala: %d, Capacidad restante: %d)\n",
-                    i + 1,
-                    pelicula.getNombreDePelicula(),
-                    (pelicula.getHorarioInicio() != null ? pelicula.getHorarioInicio().toString() : "No definido"),
-                    pelicula.getSala(),
-                    sucursal.getSalas().getOrDefault(pelicula.getSala(), 0)); // Mostrar capacidad
-        }
-        System.out.println("========================================");
-
-        // Seleccionar una película
-        System.out.print("Seleccione el número de la película que desea: ");
-        int seleccion = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer
-
-        // Validar la selección
-        if (seleccion < 1 || seleccion > peliculas.size()) {
-            System.out.println("Selección inválida. Inténtelo de nuevo.");
-            return;
-        }
-
-        Peliculas peliculaSeleccionada = peliculas.get(seleccion - 1);
-
-        // Mostrar detalles de la película seleccionada
-        System.out.println("\n========================================");
-        System.out.println("Detalles de la película seleccionada:");
-        System.out.println("Nombre: " + peliculaSeleccionada.getNombreDePelicula());
-        System.out.println("Horario: " + (peliculaSeleccionada.getHorarioInicio() != null
-                ? peliculaSeleccionada.getHorarioInicio().toString()
-                : "No definido"));
-        System.out.println("Sala: " + peliculaSeleccionada.getSala());
-        System.out.println("Resumen: " + peliculaSeleccionada.getResumen());
-        System.out.println("Sinopsis: " + peliculaSeleccionada.getSinopsis());
-        System.out.println("Actores: " + peliculaSeleccionada.getActores());
-        System.out.println("Clasificación: " + peliculaSeleccionada.getClasificacion());
-        System.out.println("Capacidad restante: " + sucursal.getSalas().getOrDefault(peliculaSeleccionada.getSala(), 0));
-        System.out.println("========================================");
-
-        // Confirmar compra
-        System.out.print("¿Desea comprar un boleto para esta película? (s/n): ");
-        String confirmar = scanner.nextLine().toLowerCase();
-
-        if (confirmar.equals("s")) {
-            // Reducir capacidad de la sala
-            if (sucursal.reducirCapacidadSala(peliculaSeleccionada.getSala())) {
-                // Generar el boleto
-                Boleto boleto = new Boleto(
-                        UUID.randomUUID().toString(),
-                        sucursal.getNombre(),
-                        peliculaSeleccionada.getNombreDePelicula(),
-                        peliculaSeleccionada.getHorarioInicio(),
-                        peliculaSeleccionada.getSala()
-                );
-
-                // Programar liberación automática de la sala
-                peliculaSeleccionada.programarLiberacion(sucursal);
-
-                // Confirmación de compra
-                System.out.println("\n========================================");
-                System.out.println("¡Boleto comprado con éxito!");
-                System.out.println("Detalles del boleto:");
-                System.out.println("ID de Boleto: " + boleto.getId());
-                System.out.println("Sucursal: " + boleto.getSucursal());
-                System.out.println("Película: " + boleto.getNombrePelicula());
-                System.out.println("Horario: " + boleto.getHorario());
-                System.out.println("Sala: " + boleto.getSala());
-                System.out.println("========================================\n");
-            } else {
-                System.out.println("No hay lugares disponibles en la sala " + peliculaSeleccionada.getSala() + ".");
-            }
-        } else {
-            System.out.println("Compra cancelada.");
-        }
-    }
-
     
     public boolean registrarUsuario(Usuario usuario) {
         for (Usuario u : usuarios) {

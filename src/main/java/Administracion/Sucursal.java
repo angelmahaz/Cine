@@ -1,4 +1,4 @@
-package Sucursales_y_Peliculas;
+package Administracion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,5 +26,31 @@ public class Sucursal {
         salas.put(SALA_3, capacidadSala3);
     }
     
-  }    
+    public boolean reducirCapacidadSala(int sala) {
+        if (salas.containsKey(sala) && salas.get(sala) > 0) {
+            salas.put(sala, salas.get(sala) - 1);
+            return true; // Operación exitosa
+        }
+        return false; // No hay lugares disponibles
+    }
 
+
+    public String getNombre() {
+        return nombre_sucursal;
+    }
+
+    public List<Peliculas> getPeliculas() {
+        return peliculas;
+    }
+
+    
+    public void liberarCapacidadSala(int sala) {
+        if (salas.containsKey(sala)) {
+            salas.put(sala, salas.get(sala) + 1);
+        }
+    }
+
+    public Map<Integer, Integer> getSalas() {
+    return salas;
+    } 
+  }    
